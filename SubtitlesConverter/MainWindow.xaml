@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SubtitlesConverter"
         mc:Ignorable="d"
-        Title="Subtitles converter txt - srt - txt" Height="130" Width="280">
+        Title="Subtitles converter txt - srt" Height="130" Width="300">
     <Grid>
         <StackPanel>
             <TextBlock Name="tb_textFile" Margin="5"/>
