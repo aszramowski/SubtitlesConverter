@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,25 +22,35 @@ namespace SubtitlesConverter
     /// </summary>
     public partial class MainWindow : Window
     {
-        string filePath = @"d:\Projekty_trening\Wrong Turn UNRATED (2003) 1080p BrRip x264 - YIFY\Wrong.Turn.UNRATED.2003.1080p.BRrip.x264.YIFY.txt";
-        string newFilePath = @"d:Projekty_trening\noweNapiski.srt";
+        //string newFilePath = @"d:\Projekty_trening\napisy\Wrong.Turn.UNRATED.2003.1080p.BRrip.x264.YIFY.txt";
+        //string filePath = @"d:Projekty_trening\napisy\Wrong.Turn.UNRATED.2003.1080p.BRrip.x264.YIFY.srt";
 
         public MainWindow()
         {
-            InitializeComponent();
-            GetText();
+            InitializeComponent();            
         }
 
-        private void GetText()
+        private void GetSubtitles()
         {
+            string newFilePath = "";
             SubtitleManager sm = new SubtitleManager();
-            List<string> text = sm.ReadTxtSubtitles(filePath);
+            List<string> linesOut;
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+                linesOut = sm.SubtitleConvert(filePath);
 
-            //tb_textFile.Text = "";
-            //foreach (var str in text)
-            //    tb_textFile.Text += str;
+                if (filePath.EndsWith(".txt")) newFilePath = filePath.Replace(".txt", ".srt");
+                else if (filePath.EndsWith(".srt")) newFilePath = filePath.Replace(".srt", ".txt");
 
-            File.WriteAllLines(newFilePath, text);
+                File.WriteAllLines(newFilePath, linesOut, Encoding.GetEncoding("Windows-1250"));
+            }                        
         }
+
+        private void loadSubtitlesHandler(object sender, RoutedEventArgs e)
+        {
+            GetSubtitles();
+        }      
     }
 }
