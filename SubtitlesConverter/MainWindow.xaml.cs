@@ -35,17 +35,26 @@ namespace SubtitlesConverter
             string newFilePath = "";
             SubtitleManager sm = new SubtitleManager();
             List<string> linesOut;
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
+
+            try
             {
-                string filePath = openFileDialog.FileName;
-                linesOut = sm.SubtitleConvert(filePath);
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    string filePath = openFileDialog.FileName;
+                    linesOut = sm.SubtitleConvert(filePath);
+                    
+                    if (filePath.EndsWith(".txt")) newFilePath = filePath.Replace(".txt", ".srt");
+                    else if (filePath.EndsWith(".srt")) newFilePath = filePath.Replace(".srt", ".txt");
 
-                if (filePath.EndsWith(".txt")) newFilePath = filePath.Replace(".txt", ".srt");
-                else if (filePath.EndsWith(".srt")) newFilePath = filePath.Replace(".srt", ".txt");
-
-                File.WriteAllLines(newFilePath, linesOut, Encoding.GetEncoding("Windows-1250"));
-            }                        
+                    File.WriteAllLines(newFilePath, linesOut, Encoding.GetEncoding("Windows-1250"));
+                    tb_textFile.Text = "Napisy gotowe!";
+                }
+            }
+            catch (Exception exc)
+            {
+                tb_textFile.Text = exc.Message;                
+            }
         }
 
         private void loadSubtitlesHandler(object sender, RoutedEventArgs e)
